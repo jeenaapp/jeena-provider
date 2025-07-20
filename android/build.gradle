@@ -31,19 +31,23 @@ subprojects {
                 if (namespace == null) {
                     namespace project.group
                 }
-            }
-        }
+signingConfigs {
+    debug {
+        storeFile file("debug.keystore")
+        storePassword "android"
+        keyAlias "androiddebugkey"
+        keyPassword "android"
     }
 }
 
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
 
-subprojects {
-    project.evaluationDependsOn(":app")
-}
+        buildTypes {
+            release {
+                signingConfig signingConfigs.debug
+                minifyEnabled false
+                shrinkResources false
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+        }
 
-tasks.register("clean", Delete) {
-    delete rootProject.buildDir
 }
